@@ -13,10 +13,10 @@ import com.oscargil80.recyviewandroidsoluction.model.UserData
 import com.oscargil80.recyviewandroidsoluction.view.UserAdapter
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var  addsBtn:FloatingActionButton
-    private lateinit var  recycler:RecyclerView
-    private lateinit var  userList:ArrayList<UserData>
-    private lateinit var  userAdapter: UserAdapter
+    private lateinit var addsBtn: FloatingActionButton
+    private lateinit var recycler: RecyclerView
+    private lateinit var userList: ArrayList<UserData>
+    private lateinit var userAdapter: UserAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,19 +48,17 @@ class MainActivity : AppCompatActivity() {
 
         val addDialog = AlertDialog.Builder(this)
         addDialog.setView(v)
-        addDialog.setPositiveButton("OK"){
-            dialog,_ ->
+        addDialog.setPositiveButton("OK") { dialog, _ ->
             val names = userName.text.toString()
             val number = userNo.text.toString()
             userList.add(UserData("Name: $names", "Mobile: $number"))
             userAdapter.notifyDataSetChanged()
-            Toast.makeText(this, "Adding Number Success", Toast.LENGTH_SHORT ).show()
+            Toast.makeText(this, "Adding Number Success", Toast.LENGTH_SHORT).show()
             dialog.dismiss()
         }
-        addDialog.setNegativeButton("Cancel"){
-            dialog, _->
+        addDialog.setNegativeButton("Cancel") { dialog, _ ->
             dialog.dismiss()
-            Toast.makeText(this, "Cancel", Toast.LENGTH_SHORT ).show()
+            Toast.makeText(this, "Cancel", Toast.LENGTH_SHORT).show()
 
 
         }
