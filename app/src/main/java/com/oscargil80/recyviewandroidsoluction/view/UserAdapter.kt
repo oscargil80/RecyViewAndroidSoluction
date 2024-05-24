@@ -42,7 +42,7 @@ class UserAdapter(val c: Context, val userList: ArrayList<UserData>) :
                         val number = v.findViewById<EditText>(R.id.userNo)
                         val na =position.userName.substring(6, position.userName.length)
                         val nu =position.userMb.substring(8, position.userMb.length)
-
+/// Lo hago mañana
                         name.setText("$na")
                         number.setText("$nu")
                         name.isFocused
