@@ -40,11 +40,9 @@ class UserAdapter(val c: Context, val userList: ArrayList<UserData>) :
                         val v = LayoutInflater.from(c).inflate(R.layout.add_item, null)
                         val name = v.findViewById<EditText>(R.id.userName)
                         val number = v.findViewById<EditText>(R.id.userNo)
-                        val na =position.userName.substring(6, position.userName.length)
-                        val nu =position.userMb.substring(8, position.userMb.length)
-/// Lo hago mañana
-                        name.setText("$na")
-                        number.setText("$nu")
+
+                        name.setText( position.userName)
+                        number.setText(position.userMb)
                         name.isFocused
                         number.selectAll()
 

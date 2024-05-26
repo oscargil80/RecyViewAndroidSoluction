@@ -18,7 +18,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var userList: ArrayList<UserData>
     private lateinit var userAdapter: UserAdapter
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -33,9 +32,12 @@ class MainActivity : AppCompatActivity() {
         recycler.layoutManager = LinearLayoutManager(this)
         recycler.adapter = userAdapter
 
+        userList.add(UserData("Oscar Medina", "04146456926"))
+        userList.add(UserData("Ligia Medina", "04146456921"))
+        userList.add(UserData("Luis Medina", "04146456928"))
+        userList.add(UserData("Ana Medina", "04146456920"))
+
         addsBtn.setOnClickListener { addInfo() }
-
-
     }
 
     private fun addInfo() {
@@ -45,13 +47,12 @@ class MainActivity : AppCompatActivity() {
         val userName = v.findViewById<EditText>(R.id.userName)
         val userNo = v.findViewById<EditText>(R.id.userNo)
 
-
         val addDialog = AlertDialog.Builder(this)
         addDialog.setView(v)
         addDialog.setPositiveButton("OK") { dialog, _ ->
             val names = userName.text.toString()
             val number = userNo.text.toString()
-            userList.add(UserData("Name: $names", "Mobile: $number"))
+            userList.add(UserData(names, number))
             userAdapter.notifyDataSetChanged()
             Toast.makeText(this, "Adding Number Success", Toast.LENGTH_SHORT).show()
             dialog.dismiss()
@@ -59,8 +60,6 @@ class MainActivity : AppCompatActivity() {
         addDialog.setNegativeButton("Cancel") { dialog, _ ->
             dialog.dismiss()
             Toast.makeText(this, "Cancel", Toast.LENGTH_SHORT).show()
-
-
         }
         addDialog.create()
         addDialog.show()
