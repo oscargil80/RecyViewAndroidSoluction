@@ -4,9 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
+    android:background="@color/white"
+    android:backgroundTint="#E8EBC2"
+    app:cardBackgroundColor="#00897B"
     app:cardCornerRadius="10dp"
     app:cardElevation="8dp"
-    android:backgroundTint="#E8EBC2"
     app:cardMaxElevation="5dp">
 
     <LinearLayout
@@ -25,55 +27,57 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
+                android:orientation="horizontal"
 
-                android:orientation="horizontal">
-            <TextView
-                android:id="@+id/tvTitulo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="26dp"
-                android:text="Nombre:"
-                android:textColor="@color/black"
-                android:textSize="17sp"
-                android:textStyle="bold" />
+                android:padding="10dp">
 
-            <TextView
-                android:id="@+id/mTitulo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="textEnd"
-                android:text="Titulo"
-                android:textColor="@color/black"
-                android:textSize="17sp"
-                android:textStyle="bold|italic" />
+                <TextView
+                    android:id="@+id/tvTitulo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="26dp"
+                    android:text="Nombre:"
+                    android:textColor="@color/black"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/mTitulo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Titulo"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/black"
+                    android:textSize="17sp"
+                    android:textStyle="bold|italic" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:orientation="horizontal">
-            <TextView
-                android:id="@+id/tvSubTitulo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Nro Telefono:"
+                android:orientation="horizontal"
+                android:padding="10dp">
 
-                android:textColor="@color/black"
-                android:textSize="17sp"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/tvSubTitulo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nro Telefono:"
+
+                    android:textColor="@color/black"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
 
 
-            <TextView
-                android:id="@+id/mSubTitulo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="textEnd"
-                android:text="SubTitulo"
-                android:textColor="@color/black"
-                android:textSize="17sp"
-                android:textStyle="bold|italic" />
+                <TextView
+                    android:id="@+id/mSubTitulo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="SubTitulo"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/black"
+                    android:textSize="17sp"
+                    android:textStyle="bold|italic" />
             </LinearLayout>
 
         </LinearLayout>

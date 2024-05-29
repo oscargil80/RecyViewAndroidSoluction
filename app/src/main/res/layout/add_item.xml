@@ -15,7 +15,8 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:text="Add  Informacion de Usuario"
+            android:text="agrega Datos de usuario "
+            android:textAllCaps="true"
             android:padding="10dp"
             android:background="@color/purple_500"
             android:textColor="@color/white"
@@ -32,9 +33,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/userName"
-            android:hint="nombre"
+            android:hint="Nombre"
+            android:textColorHint="#78D07B"
             android:padding="15dp"
             android:background="@drawable/shape_background"
             android:inputType="textPersonName"
@@ -49,9 +51,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/userNo"
-            android:hint="Mobile Nro. "
+            android:hint="Nro de Telefono ej.   "
+            android:textColorHint="#78D07B"
             android:padding="15dp"
             android:background="@drawable/shape_background"
             android:inputType="phone"
