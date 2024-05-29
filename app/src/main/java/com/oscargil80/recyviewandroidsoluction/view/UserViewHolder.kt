@@ -12,6 +12,7 @@ class UserViewHolder(val v: View) : RecyclerView.ViewHolder(v) {
 
     val binding = ListItemBinding.bind(v)
     fun render(
+
         UserData: UserData,
         onClickListener: (UserData) -> Unit,
         onClickDelete: (Int, v: View) -> Unit
