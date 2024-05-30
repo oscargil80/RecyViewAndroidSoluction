@@ -7,10 +7,9 @@ import com.oscargil80.recyviewandroidsoluction.R
 import com.oscargil80.recyviewandroidsoluction.model.UserData
 
 class UserAdapter(
-    private val userList: List<UserData>,
+    private var userList: List<UserData>,
     private val  onClickListener:(UserData)->Unit,
     private val  onClickDelete: (Int, View) -> Unit)
-
 :  RecyclerView.Adapter<UserViewHolder>() {
 
 
@@ -28,5 +27,10 @@ class UserAdapter(
     override fun getItemCount(): Int {
         return userList.size
     }
+     fun updateUserData(userList: List<UserData>){
+         this.userList = userList
+         notifyDataSetChanged()
+     }
+
 }
 //private val  onClickDelete: (Int,) -> Unit)

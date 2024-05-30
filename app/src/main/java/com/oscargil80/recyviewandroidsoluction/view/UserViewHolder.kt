@@ -12,7 +12,6 @@ class UserViewHolder(val v: View) : RecyclerView.ViewHolder(v) {
 
     val binding = ListItemBinding.bind(v)
     fun render(
-
         UserData: UserData,
         onClickListener: (UserData) -> Unit,
         onClickDelete: (Int, v: View) -> Unit
@@ -21,11 +20,9 @@ class UserViewHolder(val v: View) : RecyclerView.ViewHolder(v) {
         binding.mSubTitulo.text = UserData.userMb
         binding.mMenus.setOnClickListener {
             onClickDelete(adapterPosition, binding.mMenus)
-
         }
         itemView.setOnClickListener {
             onClickListener(UserData)
-            Log.e("Render", UserData.toString())
         }
     }
 }
