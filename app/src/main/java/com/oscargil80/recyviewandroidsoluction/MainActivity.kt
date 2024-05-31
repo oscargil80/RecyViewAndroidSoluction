@@ -2,6 +2,8 @@ package com.oscargil80.recyviewandroidsoluction
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +11,9 @@ import android.widget.EditText
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -19,28 +23,75 @@ import com.oscargil80.recyviewandroidsoluction.model.UserData
 import com.oscargil80.recyviewandroidsoluction.view.UserAdapter
 
 class MainActivity : AppCompatActivity() {
-    private var userMutableList: MutableList<UserData> =    SuperDataProvider.UserDataList.toMutableList()
+    private var userMutableList: MutableList<UserData> =
+        SuperDataProvider.UserDataList.toMutableList()
     private lateinit var userAdapter: UserAdapter
     private lateinit var binding: ActivityMainBinding
-    private  var llmanager = LinearLayoutManager(this)
+    private var llmanager = LinearLayoutManager(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.etFiltro.addTextChangedListener { userfiltro ->
-        val userdatafiltrado =    userMutableList.filter { userName -> userName.userName.lowercase().contains(userfiltro.toString().lowercase()) }
-            userAdapter.updateUserData(userdatafiltrado)
-        }
+        configurarFitro()
+        iniciarRecycreView()
+        configurarSwipe()
 
+        binding.addingBtn.setOnClickListener { addInfo() }
+    }
+
+    private fun iniciarRecycreView() {
         userAdapter = UserAdapter(
             userList = userMutableList,
             onClickListener = { userdata -> onItemSelected(userdata) },
             onClickDelete = { position, v -> onChangeItem(position, v) }
         )
+
+        val swipegesture = object : SwipeGesture(this) {
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                when (direction) {
+                    ItemTouchHelper.LEFT -> {
+                        userMutableList.removeAt(2)
+                        userAdapter.notifyItemRemoved(2)
+                        userAdapter.updateUserData(userMutableList)
+                    }
+                    ItemTouchHelper.RIGHT -> {
+                        Toast.makeText(this@MainActivity, "A La Derecha", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+        }
+
+        val touchHelper = ItemTouchHelper(swipegesture)
+        touchHelper.attachToRecyclerView(binding.mRecycler)
+
         binding.mRecycler.layoutManager = llmanager
         binding.mRecycler.adapter = userAdapter
-        binding.addingBtn.setOnClickListener { addInfo() }
+    }
+
+    private fun configurarSwipe() {
+        binding.swipe.setColorSchemeResources(R.color.red, R.color.naranja, R.color.azul)
+        binding.swipe.setProgressBackgroundColorSchemeColor(
+            ContextCompat.getColor(
+                this,
+                R.color.verde
+            )
+        )
+        binding.swipe.setOnRefreshListener {
+            Handler(Looper.getMainLooper()).postDelayed({
+                binding.swipe.isRefreshing = false
+            }, 8000)
+        }
+    }
+
+    private fun configurarFitro() {
+        binding.etFiltro.addTextChangedListener { userfiltro ->
+            val userdatafiltrado = userMutableList.filter { userName ->
+                userName.userName.lowercase().contains(userfiltro.toString().lowercase())
+            }
+            userAdapter.updateUserData(userdatafiltrado)
+        }
     }
 
     private fun onChangeItem(position: Int, v: View) {
@@ -65,8 +116,7 @@ class MainActivity : AppCompatActivity() {
                             Numero = number.text.toString()
                             userMutableList.set(position, UserData(Nombre, Numero))
                             userAdapter.notifyItemChanged(position)
-                            Toast.makeText(this, "Informacion fue  Cambiado", Toast.LENGTH_LONG)
-                                .show()
+                            Toast.makeText(this, "Informacion fue  Cambiado", Toast.LENGTH_LONG).show()
                             dialog.dismiss()
                         }
                         .setNegativeButton("Cancel") { dialog, _ ->
@@ -123,19 +173,22 @@ class MainActivity : AppCompatActivity() {
         val addDialog = AlertDialog.Builder(this)
         addDialog.setView(v)
         addDialog.setPositiveButton("OK") { dialog, _ ->
-            if(userName.text.toString().isNotBlank() || userNo.text.toString().isNotBlank())
-            {
+            if (userName.text.toString().isNotBlank() || userNo.text.toString().isNotBlank()) {
                 val names = userName.text.toString()
                 val number = userNo.text.toString()
                 val posadd = 2//userMutableList.size-1
                 userMutableList.add(posadd, UserData(names, number))
                 userAdapter.notifyItemInserted(posadd)
-                llmanager.scrollToPositionWithOffset(posadd,20 )
+                llmanager.scrollToPositionWithOffset(posadd, 20)
+                dialog.dismiss()
+            } else {
+                Toast.makeText(
+                    this,
+                    "No se agrego ningun elemento por estar vacio  ",
+                    Toast.LENGTH_SHORT
+                ).show()
                 dialog.dismiss()
             }
-            else
-                Toast.makeText(this, "No se agrego ningun elemento por estar vacio  ", Toast.LENGTH_SHORT).show()
-                dialog.dismiss()
         }
         addDialog.setNegativeButton("Cancel") { dialog, _ ->
             dialog.dismiss()
