@@ -5,14 +5,14 @@ import com.oscargil80.recyviewandroidsoluction.model.UserData
 class SuperDataProvider {
     companion object{
         val UserDataList = listOf<UserData>(
-            UserData("Oscar Medina", "04146456926"),
-             UserData("Ligia Medina", "04146456921"),
-             UserData("Luis Medina", "04146456928"),
-             UserData("Ana Medina", "04146456920"),
+            UserData("Posicion 0", "04146456926"),
+             UserData("Posicion 1", "04146456921"),
+             UserData("Posicion 2", "04146456928"),
+             UserData("Posicion 3", "04146456920"),
 
-        UserData("Oscar Medina", "04146456926"),
-        UserData("Ligia Medina", "04146456921"),
-        UserData("Luis Medina", "04146456928"),
-        UserData("Ana Medina", "04146456920"))
+        UserData("posicion 4", "04146456926"),
+        UserData("Posicion 5", "04146456921"),
+        UserData("Posicion 6", "04146456928"),
+        UserData("Posicion 7", "04146456920"))
     }
 }

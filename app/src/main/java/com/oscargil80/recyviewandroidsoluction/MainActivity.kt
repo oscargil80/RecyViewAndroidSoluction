@@ -21,10 +21,11 @@ import com.oscargil80.recyviewandroidsoluction.databinding.ActivityMainBinding
 import com.oscargil80.recyviewandroidsoluction.databinding.AddItemBinding
 import com.oscargil80.recyviewandroidsoluction.model.UserData
 import com.oscargil80.recyviewandroidsoluction.view.UserAdapter
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private var userMutableList: MutableList<UserData> =
-        SuperDataProvider.UserDataList.toMutableList()
+      SuperDataProvider.UserDataList.toMutableList()
     private lateinit var userAdapter: UserAdapter
     private lateinit var binding: ActivityMainBinding
     private var llmanager = LinearLayoutManager(this)
@@ -36,7 +37,6 @@ class MainActivity : AppCompatActivity() {
         configurarFitro()
         iniciarRecycreView()
         configurarSwipe()
-
         binding.addingBtn.setOnClickListener { addInfo() }
     }
 
@@ -46,28 +46,34 @@ class MainActivity : AppCompatActivity() {
             onClickListener = { userdata -> onItemSelected(userdata) },
             onClickDelete = { position, v -> onChangeItem(position, v) }
         )
+        configurarSwipeGesture()
+        binding.mRecycler.layoutManager = llmanager
+        binding.mRecycler.adapter = userAdapter
+    }
 
+    private fun configurarSwipeGesture() {
         val swipegesture = object : SwipeGesture(this) {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val pos = viewHolder.bindingAdapterPosition
                 when (direction) {
                     ItemTouchHelper.LEFT -> {
-                        userMutableList.removeAt(2)
-                        userAdapter.notifyItemRemoved(2)
+                        userMutableList.removeAt(pos)
+                        userAdapter.notifyItemRemoved(pos)
                         userAdapter.updateUserData(userMutableList)
                     }
                     ItemTouchHelper.RIGHT -> {
-                        Toast.makeText(this@MainActivity, "A La Derecha", Toast.LENGTH_LONG).show()
+                        if(pos>0) {
+                            Collections.swap(userMutableList, pos, pos - 1)
+                            userAdapter.notifyItemRemoved(pos)
+                        }
+                        userAdapter.updateUserData(userMutableList)
                     }
                 }
             }
         }
-
         val touchHelper = ItemTouchHelper(swipegesture)
         touchHelper.attachToRecyclerView(binding.mRecycler)
-
-        binding.mRecycler.layoutManager = llmanager
-        binding.mRecycler.adapter = userAdapter
     }
 
     private fun configurarSwipe() {
@@ -81,7 +87,8 @@ class MainActivity : AppCompatActivity() {
         binding.swipe.setOnRefreshListener {
             Handler(Looper.getMainLooper()).postDelayed({
                 binding.swipe.isRefreshing = false
-            }, 8000)
+            }, 2000)
+            userAdapter.updateUserData(userMutableList)
         }
     }
 
@@ -161,22 +168,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addInfo() {
-
         val inflater = LayoutInflater.from(this)
         val v = inflater.inflate(R.layout.add_item, null)
-
         var binding = AddItemBinding.bind(v)
-
-        val userName = binding.userName//v.findViewById<EditText>(R.id.userName)
-        val userNo = binding.userNo//v.findViewById<EditText>(R.id.userNo)
-
+        val userName = binding.userName
+        val userNo = binding.userNo
         val addDialog = AlertDialog.Builder(this)
         addDialog.setView(v)
         addDialog.setPositiveButton("OK") { dialog, _ ->
             if (userName.text.toString().isNotBlank() || userNo.text.toString().isNotBlank()) {
                 val names = userName.text.toString()
                 val number = userNo.text.toString()
-                val posadd = 2//userMutableList.size-1
+                var posadd = userMutableList.size-1
+                if(posadd<0)  posadd= 0
+
                 userMutableList.add(posadd, UserData(names, number))
                 userAdapter.notifyItemInserted(posadd)
                 llmanager.scrollToPositionWithOffset(posadd, 20)

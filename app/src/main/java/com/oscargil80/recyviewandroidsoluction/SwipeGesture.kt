@@ -7,6 +7,7 @@ import android.graphics.Canvas
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.oscargil80.recyviewandroidsoluction.view.UserAdapter
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 
 
@@ -14,8 +15,8 @@ abstract  class SwipeGesture(context:Context): ItemTouchHelper.SimpleCallback(0,
 
    val deleteColor = ContextCompat.getColor(context, R.color.red)
    val archiveColor = ContextCompat.getColor(context, R.color.verde)
-    val deleteIcon = R.drawable.ic_delete
-    val archiveIcon = R.drawable.ic_add
+    val deleteIcon = R.drawable.ic_del
+    val upIcon = R.drawable.ic_up
 
 
     override fun onMove(
@@ -50,13 +51,13 @@ abstract  class SwipeGesture(context:Context): ItemTouchHelper.SimpleCallback(0,
             .addSwipeLeftBackgroundColor(deleteColor)
             .addSwipeLeftActionIcon(deleteIcon)
             .addSwipeRightBackgroundColor(archiveColor)
-            .addSwipeRightActionIcon(archiveIcon)
+            .addSwipeRightActionIcon(upIcon)
             .create()
             .decorate()
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
     }
 
-    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int, ) {
 
     }
 

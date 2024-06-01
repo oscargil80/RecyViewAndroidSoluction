@@ -19,7 +19,9 @@ class UserViewHolder(val v: View) : RecyclerView.ViewHolder(v) {
         binding.mTitulo.text = UserData.userName
         binding.mSubTitulo.text = UserData.userMb
         binding.mMenus.setOnClickListener {
-            onClickDelete(adapterPosition, binding.mMenus)
+            onClickDelete(bindingAdapterPosition, binding.mMenus)
+            // onClickDelete(getBindingAdapterPosition(), binding.mMenus)
+
         }
         itemView.setOnClickListener {
             onClickListener(UserData)
