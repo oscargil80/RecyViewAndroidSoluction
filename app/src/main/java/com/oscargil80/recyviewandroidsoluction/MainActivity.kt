@@ -24,8 +24,8 @@ import com.oscargil80.recyviewandroidsoluction.view.UserAdapter
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
-    private var userMutableList: MutableList<UserData> =
-      SuperDataProvider.UserDataList.toMutableList()
+
+    private var userMutableList= SuperDataProvider.UserDataList
     private lateinit var userAdapter: UserAdapter
     private lateinit var binding: ActivityMainBinding
     private var llmanager = LinearLayoutManager(this)
@@ -58,14 +58,12 @@ class MainActivity : AppCompatActivity() {
                 val pos = viewHolder.bindingAdapterPosition
                 when (direction) {
                     ItemTouchHelper.LEFT -> {
-                        userMutableList.removeAt(pos)
-                        userAdapter.notifyItemRemoved(pos)
-                        userAdapter.updateUserData(userMutableList)
+                        userMutableList = userMutableList.minus( userMutableList.elementAt(pos) )
+                        userAdapter.updateList(userMutableList.sortedBy { it.userId })
                     }
                     ItemTouchHelper.RIGHT -> {
                         if(pos>0) {
                             Collections.swap(userMutableList, pos, pos - 1)
-                            userAdapter.notifyItemRemoved(pos)
                         }
                         userAdapter.updateUserData(userMutableList)
                     }
@@ -88,7 +86,7 @@ class MainActivity : AppCompatActivity() {
             Handler(Looper.getMainLooper()).postDelayed({
                 binding.swipe.isRefreshing = false
             }, 2000)
-            userAdapter.updateUserData(userMutableList)
+            userAdapter.updateList(userMutableList.sortedBy { it.userId })
         }
     }
 
@@ -112,17 +110,21 @@ class MainActivity : AppCompatActivity() {
                     var binding = AddItemBinding.bind(v)
                     val name = binding.userName//v.findViewById<EditText>(R.id.userName)
                     val number = binding.userNo//v.findViewById<EditText>(R.id.userNo)
+                    var po = userMutableList.elementAt(position).userId
                     var Nombre = userMutableList.elementAt(position).userName
                     var Numero = userMutableList.elementAt(position).userMb
+
                     name.setText(Nombre)
                     number.setText(Numero)
+
                     AlertDialog.Builder(this)
                         .setView(v)
                         .setPositiveButton("Ok") { dialog, _ ->
                             Nombre = name.text.toString()
                             Numero = number.text.toString()
-                            userMutableList.set(position, UserData(Nombre, Numero))
-                            userAdapter.notifyItemChanged(position)
+                            userMutableList = userMutableList.minus( userMutableList.elementAt(position) )
+                            userMutableList =  userMutableList.plus(UserData(po, Nombre, Numero))
+                            userAdapter.updateList(userMutableList.sortedBy { it.userId })
                             Toast.makeText(this, "Informacion fue  Cambiado", Toast.LENGTH_LONG).show()
                             dialog.dismiss()
                         }
@@ -135,13 +137,13 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.deleteText -> {
                     var nom = userMutableList[position].userName
-                    AlertDialog.Builder(this)
+                     AlertDialog.Builder(this)
                         .setTitle("Delete")
                         .setIcon(R.drawable.ic_warning)
                         .setMessage("Estas Seguro que Deseas Eliminar a $nom?")
                         .setPositiveButton("Yes") { dialog, _ ->
-                            userMutableList.removeAt(position)
-                            userAdapter.notifyItemRemoved(position)
+                            userMutableList = userMutableList.minus( userMutableList.elementAt(position) )
+                            userAdapter.updateList(userMutableList)
                             Toast.makeText(this, "Elemento Borrado", Toast.LENGTH_LONG).show()
                             dialog.dismiss()
                         }
@@ -173,17 +175,18 @@ class MainActivity : AppCompatActivity() {
         var binding = AddItemBinding.bind(v)
         val userName = binding.userName
         val userNo = binding.userNo
+        var po = 0
         val addDialog = AlertDialog.Builder(this)
         addDialog.setView(v)
         addDialog.setPositiveButton("OK") { dialog, _ ->
             if (userName.text.toString().isNotBlank() || userNo.text.toString().isNotBlank()) {
                 val names = userName.text.toString()
                 val number = userNo.text.toString()
-                var posadd = userMutableList.size-1
+                var posadd = userMutableList.size
+                po = userMutableList.elementAt(userMutableList.lastIndex).userId+1
                 if(posadd<0)  posadd= 0
-
-                userMutableList.add(posadd, UserData(names, number))
-                userAdapter.notifyItemInserted(posadd)
+               userMutableList =  userMutableList.plus(UserData(po, names, number))
+                userAdapter.updateList(userMutableList)
                 llmanager.scrollToPositionWithOffset(posadd, 20)
                 dialog.dismiss()
             } else {
