@@ -4,10 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.EditText
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -16,7 +14,6 @@ import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.oscargil80.recyviewandroidsoluction.databinding.ActivityMainBinding
 import com.oscargil80.recyviewandroidsoluction.databinding.AddItemBinding
 import com.oscargil80.recyviewandroidsoluction.model.UserData
@@ -25,7 +22,7 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
-    private var userMutableList= SuperDataProvider.UserDataList
+    private var userList= SuperDataProvider.UserDataList
     private lateinit var userAdapter: UserAdapter
     private lateinit var binding: ActivityMainBinding
     private var llmanager = LinearLayoutManager(this)
@@ -42,7 +39,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun iniciarRecycreView() {
         userAdapter = UserAdapter(
-            userList = userMutableList,
+            userList = userList,
             onClickListener = { userdata -> onItemSelected(userdata) },
             onClickDelete = { position, v -> onChangeItem(position, v) }
         )
@@ -58,14 +55,14 @@ class MainActivity : AppCompatActivity() {
                 val pos = viewHolder.bindingAdapterPosition
                 when (direction) {
                     ItemTouchHelper.LEFT -> {
-                        userMutableList = userMutableList.minus( userMutableList.elementAt(pos) )
-                        userAdapter.updateList(userMutableList.sortedBy { it.userId })
+                        userList = userList.minus( userList.elementAt(pos) )
+                        userAdapter.updateList(userList)
                     }
                     ItemTouchHelper.RIGHT -> {
                         if(pos>0) {
-                            Collections.swap(userMutableList, pos, pos - 1)
+                            Collections.swap(userList, pos, pos - 1)
                         }
-                        userAdapter.updateUserData(userMutableList)
+                        userAdapter.updateUserData(userList)
                     }
                 }
             }
@@ -86,13 +83,13 @@ class MainActivity : AppCompatActivity() {
             Handler(Looper.getMainLooper()).postDelayed({
                 binding.swipe.isRefreshing = false
             }, 2000)
-            userAdapter.updateList(userMutableList.sortedBy { it.userId })
+            userAdapter.updateList(userList.sortedBy { it.userId })
         }
     }
 
     private fun configurarFitro() {
         binding.etFiltro.addTextChangedListener { userfiltro ->
-            val userdatafiltrado = userMutableList.filter { userName ->
+            val userdatafiltrado = userList.filter { userName ->
                 userName.userName.lowercase().contains(userfiltro.toString().lowercase())
             }
             userAdapter.updateUserData(userdatafiltrado)
@@ -110,9 +107,9 @@ class MainActivity : AppCompatActivity() {
                     var binding = AddItemBinding.bind(v)
                     val name = binding.userName//v.findViewById<EditText>(R.id.userName)
                     val number = binding.userNo//v.findViewById<EditText>(R.id.userNo)
-                    var po = userMutableList.elementAt(position).userId
-                    var Nombre = userMutableList.elementAt(position).userName
-                    var Numero = userMutableList.elementAt(position).userMb
+                    var po = userList.elementAt(position).userId
+                    var Nombre = userList.elementAt(position).userName
+                    var Numero = userList.elementAt(position).userMb
 
                     name.setText(Nombre)
                     number.setText(Numero)
@@ -122,9 +119,9 @@ class MainActivity : AppCompatActivity() {
                         .setPositiveButton("Ok") { dialog, _ ->
                             Nombre = name.text.toString()
                             Numero = number.text.toString()
-                            userMutableList = userMutableList.minus( userMutableList.elementAt(position) )
-                            userMutableList =  userMutableList.plus(UserData(po, Nombre, Numero))
-                            userAdapter.updateList(userMutableList.sortedBy { it.userId })
+                            userList = userList.minus( userList.elementAt(position) )
+                            userList =  userList.plus(UserData(po, Nombre, Numero))
+                            userAdapter.updateList(userList.sortedBy { it.userId })
                             Toast.makeText(this, "Informacion fue  Cambiado", Toast.LENGTH_LONG).show()
                             dialog.dismiss()
                         }
@@ -136,14 +133,14 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.deleteText -> {
-                    var nom = userMutableList[position].userName
+                    var nom = userList[position].userName
                      AlertDialog.Builder(this)
                         .setTitle("Delete")
                         .setIcon(R.drawable.ic_warning)
                         .setMessage("Estas Seguro que Deseas Eliminar a $nom?")
                         .setPositiveButton("Yes") { dialog, _ ->
-                            userMutableList = userMutableList.minus( userMutableList.elementAt(position) )
-                            userAdapter.updateList(userMutableList)
+                            userList = userList.minus( userList.elementAt(position) )
+                            userAdapter.updateList(userList)
                             Toast.makeText(this, "Elemento Borrado", Toast.LENGTH_LONG).show()
                             dialog.dismiss()
                         }
@@ -175,19 +172,18 @@ class MainActivity : AppCompatActivity() {
         var binding = AddItemBinding.bind(v)
         val userName = binding.userName
         val userNo = binding.userNo
-        var po = 0
         val addDialog = AlertDialog.Builder(this)
         addDialog.setView(v)
         addDialog.setPositiveButton("OK") { dialog, _ ->
             if (userName.text.toString().isNotBlank() || userNo.text.toString().isNotBlank()) {
                 val names = userName.text.toString()
                 val number = userNo.text.toString()
-                var posadd = userMutableList.size
-                po = userMutableList.elementAt(userMutableList.lastIndex).userId+1
-                if(posadd<0)  posadd= 0
-               userMutableList =  userMutableList.plus(UserData(po, names, number))
-                userAdapter.updateList(userMutableList)
-                llmanager.scrollToPositionWithOffset(posadd, 20)
+                var po = 1
+                if(userList.size>0)
+                po  =  userList.sortedBy { it.userId }.elementAt(userList.lastIndex).userId+1
+                userList =  userList.plus(UserData(po, names, number))
+                userAdapter.updateList(userList)
+                llmanager.scrollToPositionWithOffset(userList.size, 20)
                 dialog.dismiss()
             } else {
                 Toast.makeText(
