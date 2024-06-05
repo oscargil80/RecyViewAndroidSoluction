@@ -11,7 +11,9 @@ import com.oscargil80.recyviewandroidsoluction.userDataDiffUtil
 class UserAdapter(
     private var userList: List<UserData>,
     private val  onClickListener:(UserData)->Unit,
-    private val  onClickDelete: (Int, View) -> Unit)
+    private val  onClickDelete: (Int, View) -> Unit,
+    private var  onClickExpan: (Int, Boolean, View ) -> Unit
+)
 :  RecyclerView.Adapter<UserViewHolder>() {
 
     fun updateList(newList:List<UserData>){
@@ -30,7 +32,8 @@ class UserAdapter(
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
         val item = userList[position]
-        holder.render(item, onClickListener, onClickDelete)
+        holder.render(item, onClickListener, onClickDelete, onClickExpan)
+
     }
 
     override fun getItemCount(): Int {

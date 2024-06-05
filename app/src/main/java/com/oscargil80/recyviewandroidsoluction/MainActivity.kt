@@ -7,6 +7,7 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.PopupMenu
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -41,11 +42,18 @@ class MainActivity : AppCompatActivity() {
         userAdapter = UserAdapter(
             userList = userList,
             onClickListener = { userdata -> onItemSelected(userdata) },
-            onClickDelete = { position, v -> onChangeItem(position, v) }
+            onClickDelete = { position, v -> onChangeItem(position, v) },
+            onClickExpan = {position, bol, v -> onClickExpandable(position, bol, v) }
+
         )
         configurarSwipeGesture()
         binding.mRecycler.layoutManager = llmanager
         binding.mRecycler.adapter = userAdapter
+    }
+
+    private fun onClickExpandable(position:Int, bol:Boolean, v: View) {
+        val langDesc = v.findViewById<TextView>(R.id.langDesc)
+        langDesc.visibility = if (bol) View.VISIBLE else View.GONE
     }
 
     private fun configurarSwipeGesture() {
@@ -120,7 +128,7 @@ class MainActivity : AppCompatActivity() {
                             Nombre = name.text.toString()
                             Numero = number.text.toString()
                             userList = userList.minus( userList.elementAt(position) )
-                            userList =  userList.plus(UserData(po, Nombre, Numero))
+                            userList =  userList.plus(UserData(po, Nombre, Numero, "hola"))
                             userAdapter.updateList(userList.sortedBy { it.userId })
                             Toast.makeText(this, "Informacion fue  Cambiado", Toast.LENGTH_LONG).show()
                             dialog.dismiss()
@@ -181,7 +189,7 @@ class MainActivity : AppCompatActivity() {
                 var po = 1
                 if(userList.size>0)
                 po  =  userList.sortedBy { it.userId }.elementAt(userList.lastIndex).userId+1
-                userList =  userList.plus(UserData(po, names, number))
+                userList =  userList.plus(UserData(po, names, number, "hola"))
                 userAdapter.updateList(userList)
                 llmanager.scrollToPositionWithOffset(userList.size, 20)
                 dialog.dismiss()
