@@ -23,7 +23,6 @@ class UserAdapter(
         result.dispatchUpdatesTo(this)
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val v = inflater.inflate(R.layout.list_item, parent, false)
@@ -33,16 +32,18 @@ class UserAdapter(
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
         val item = userList[position]
         holder.render(item, onClickListener, onClickDelete, onClickExpan)
-
     }
 
     override fun getItemCount(): Int {
         return userList.size
     }
+
      fun updateUserData(userList: List<UserData>){
          this.userList = userList
          notifyDataSetChanged()
      }
+
+
 
 }
 //private val  onClickDelete: (Int,) -> Unit)

@@ -44,7 +44,6 @@ class MainActivity : AppCompatActivity() {
             onClickListener = { userdata -> onItemSelected(userdata) },
             onClickDelete = { position, v -> onChangeItem(position, v) },
             onClickExpan = {position, bol, v -> onClickExpandable(position, bol, v) }
-
         )
         configurarSwipeGesture()
         binding.mRecycler.layoutManager = llmanager
@@ -52,8 +51,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onClickExpandable(position:Int, bol:Boolean, v: View) {
+
         val langDesc = v.findViewById<TextView>(R.id.langDesc)
         langDesc.visibility = if (bol) View.VISIBLE else View.GONE
+        //userAdapter.notifyItemChanged(position)
     }
 
     private fun configurarSwipeGesture() {
