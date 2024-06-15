@@ -115,7 +115,7 @@
             android:layout_width="0dp"
             android:padding="8dp"
             android:textColor="@color/black"
-            android:text="Or es una persona espeal que no sabe escribir por teclado y no es dificil pero que se hace el es asi, "
+            android:text="Or es una persona espeao sabe escribir por teclado y no es dificil pero que se hace el es asi, "
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/consLayout"
             app:layout_constraintStart_toStartOf="parent"
